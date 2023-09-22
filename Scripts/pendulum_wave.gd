@@ -16,9 +16,9 @@ var swing_angle : float = 90
 ## Angle that Pendulum will be at bottom dead center. Can cause unexpected issues if not 90 and using curved paths.
 @export_range(0, 360)
 var gravity_angle : float = 90
-## Start position of RightLimitLine. This line will end at max_length at an angle of 0.5 -swing_angle + gravity_angle from the start position.
+## Start position of RightLimitLine. This line will end at Max Length at an angle of 0.5 -Swing Angle + Gravity Angle from the start position.
 @export var right_origin : Vector2 = Vector2(0,-600)
-## Start position of LeftLimitLine. This line will end at max_length at an angle of 0.5 swing_angle + gravity_angle from the start position.
+## Start position of LeftLimitLine. This line will end at Max Length at an angle of 0.5 Swing Angle + Gravity Angle from the start position.
 @export var left_origin : Vector2 = Vector2(0,-600)
 ## If true, Pendulums will follow a circular arc. If false, they will follow a straight line.
 @export var curved_path : bool = true
@@ -113,8 +113,10 @@ func _create_pendulums():
 		var curve = Curve2D.new()
 		# Calculate bezier control point distance for this specific Pendulum path
 		var control_distance = curve_factor * pendulum_length
-		# Create 'out' control point for start point on curve
-		var start_point_out = calculate_point(control_distance, gravity_angle + (-swing_angle * 0.5) + 90, Vector2())
+		# Create 'out' control point for start point on curve, only added if using a curved path
+		var start_point_out = Vector2()
+		if curved_path:
+			start_point_out = calculate_point(control_distance, gravity_angle + (-swing_angle * 0.5) + 90, Vector2())
 		# Add start point to curve with control point. Start point is along the RightLimitLine at the pendulum length
 		curve.add_point(calculate_point(pendulum_length, gravity_angle + (-swing_angle * 0.5), right_origin), Vector2(), start_point_out)
 		
@@ -138,8 +140,10 @@ func _create_pendulums():
 			var center_left_pos_out = calculate_point(control_distance, gravity_angle + (swing_angle * 0.25) + 90, Vector2())
 			curve.add_point(center_left_pos, center_left_pos_in, center_left_pos_out)
 		
-		# Create 'in' control point for end point on curve
-		var end_point_in = calculate_point(control_distance, gravity_angle + (swing_angle * 0.5) - 90, Vector2())
+		# Create 'in' control point for end point on curve, only added if using a curved path
+		var end_point_in = Vector2()
+		if curved_path:
+			end_point_in = calculate_point(control_distance, gravity_angle + (swing_angle * 0.5) - 90, Vector2())
 		# Add end point to curve with control point. End point is along the LeftLimitLine at the pendulum length
 		curve.add_point(calculate_point(pendulum_length, gravity_angle + (swing_angle * 0.5), left_origin), end_point_in, Vector2())
 		
@@ -161,7 +165,7 @@ func _create_pendulums():
 		# Add pendulum to Pendulums Array
 		pendulums.push_back(pendulum_node)
 	
-	# If drawing lines between Pendulums, add points to the line ad center_origin and all Pendulum positions
+	# If drawing lines between Pendulums, add points to the line at center_origin and all Pendulum positions
 	if draw_lines_between_pendulums:
 		pendulum_line.add_point(center_origin, 0)
 		for p in pendulums:

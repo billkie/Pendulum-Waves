@@ -1,0 +1,41 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="Pendulum Waves"
+run/main_scene="res://Scenes/PendulumWave.tscn"
+config/features=PackedStringArray("4.1", "Forward Plus")
+config/icon="res://Sprites/icon.svg"
+
+[audio]
+
+general/2d_panning_strength=2.0
+
+[display]
+
+window/size/viewport_width=3480
+window/size/viewport_height=2160
+window/size/mode=2
+window/vsync/vsync_mode=0
+
+[editor]
+
+movie_writer/mjpeg_quality=1.0
+movie_writer/movie_file="E:/Videos/Godot/Pendulum Waves 2.avi"
+
+[physics]
+
+2d/run_on_separate_thread=true
+common/physics_jitter_fix=0.0
+
+[rendering]
+
+environment/defaults/default_clear_color=Color(0.101961, 0.0745098, 0.121569, 1)

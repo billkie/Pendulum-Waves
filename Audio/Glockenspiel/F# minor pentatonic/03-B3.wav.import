@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://nvbc52s1l5tb"
+path="res://.godot/imported/03-B3.wav-11eaae2f93c1a3b4fb5df643500d4fce.sample"
+
+[deps]
+
+source_file="res://Audio/Glockenspiel/F# minor pentatonic/03-B3.wav"
+dest_files=["res://.godot/imported/03-B3.wav-11eaae2f93c1a3b4fb5df643500d4fce.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://ce0eo7f335w65"]
+
+[ext_resource type="Texture2D" uid="uid://ceoivj61jinac" path="res://Sprites/Circle32.png" id="1_ibonu"]
+[ext_resource type="Script" path="res://Scripts/pendulum.gd" id="1_kuh2i"]
+[ext_resource type="PackedScene" uid="uid://bupe81qi6mkp2" path="res://Scenes/SoundQueue.tscn" id="2_bivet"]
+
+[sub_resource type="Environment" id="Environment_03ubm"]
+background_mode = 3
+glow_enabled = true
+glow_bloom = 0.07
+glow_blend_mode = 0
+glow_hdr_threshold = 0.57
+
+[node name="Pendulum" type="Path2D"]
+script = ExtResource("1_kuh2i")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="."]
+
+[node name="Sprite" type="Sprite2D" parent="PathFollow2D"]
+modulate = Color(1.97, 1, 1, 1)
+texture = ExtResource("1_ibonu")
+
+[node name="SoundQueue" parent="PathFollow2D" instance=ExtResource("2_bivet")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_03ubm")

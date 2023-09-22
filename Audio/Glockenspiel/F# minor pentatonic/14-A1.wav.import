@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c8jct63o26xeu"
+path="res://.godot/imported/14-A1.wav-b12432ca191324b16a303da1789b7a7c.sample"
+
+[deps]
+
+source_file="res://Audio/Glockenspiel/F# minor pentatonic/14-A1.wav"
+dest_files=["res://.godot/imported/14-A1.wav-b12432ca191324b16a303da1789b7a7c.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

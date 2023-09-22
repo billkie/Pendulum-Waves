@@ -1,0 +1,6 @@
+res://Scenes/Pendulum.tscn
+res://Scenes/PendulumWave.tscn
+res://Scenes/SoundQueue.tscn
+res://Scripts/pendulum.gd
+res://Scripts/pendulum_wave.gd
+res://Scripts/sound_queue.gd

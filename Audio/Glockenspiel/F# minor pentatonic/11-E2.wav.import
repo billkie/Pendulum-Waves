@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://crukt5pakn64n"
+path="res://.godot/imported/11-E2.wav-44b5ef60c67df94dd27f3562a049b79a.sample"
+
+[deps]
+
+source_file="res://Audio/Glockenspiel/F# minor pentatonic/11-E2.wav"
+dest_files=["res://.godot/imported/11-E2.wav-44b5ef60c67df94dd27f3562a049b79a.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

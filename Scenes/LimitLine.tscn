@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://f5cun7244dok"]
+
+[node name="LimitLine" type="Line2D"]
+width = 5.0
+default_color = Color(1, 0, 0.39, 1)

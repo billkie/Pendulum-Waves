@@ -1,11 +1,15 @@
 extends Node2D
+class_name PendulumWave
 
 ## Amount of Pendulums. If using sounds, this should ideally be a multiple of the amount of sounds. This will also be the max BPM used, assuming a bpm_multiplier of 1.
 @export var pendulum_count : int = 15
 ## Multiplies the BPM of each pendulum. With large Pendulum counts, this should be ideally below 1 and get smaller the more Pendulums added.
 @export var bpm_multiplier : float = 1
+## Modifies the amount subtracted from the max BPM of each pendulum, depending on the pendulum number
+@export_range(0.001, 1)
+var bpm_ratio : float = 1
 ## Minimum Pendulum length.
-@export var min_length : float = 200
+@export var min_length : float = 10
 ## Maximum Pendulum length.
 @export var max_length : float = 1000
 ## Adjusts the size of the Pendulum Sprite
@@ -17,35 +21,30 @@ var swing_angle : float = 90
 @export_range(0, 360)
 var gravity_angle : float = 90
 ## Start position of RightLimitLine. This line will end at Max Length at an angle of 0.5 -Swing Angle + Gravity Angle from the start position.
-@export var right_origin : Vector2 = Vector2(0,-600)
+@export var right_origin : Vector2 = Vector2(0,0)
 ## Start position of LeftLimitLine. This line will end at Max Length at an angle of 0.5 Swing Angle + Gravity Angle from the start position.
-@export var left_origin : Vector2 = Vector2(0,-600)
+@export var left_origin : Vector2 = Vector2(0,0)
 ## If true, Pendulums will follow a circular arc. If false, they will follow a straight line.
 @export var curved_path : bool = true
 ## Ease type to use for Pendulum Tweens
-@export var ease_type : Tween.EaseType
+@export var ease_type : Tween.EaseType = Tween.EASE_IN_OUT
 ## Transition type to use for Pendulum Tweens. Linear will create a hard direction change, while Sine will create a more natural pendulum swing.
 @export var transition_type : Tween.TransitionType
 ## Optionally draw lines between Pendulums using PendulumLine node.
-@export var draw_lines_between_pendulums : bool = false
+@export var draw_lines_between_pendulums : bool = true
 ## Add an offset to LimitLines to account for line thickness and Pendulum sprite size. Needs further refinement.
-@export var use_limit_offset : bool = false
-## NodePath for PendulumLine node
-@export var pendulum_line_path : NodePath
-## NodePath for LeftLimitLine node
-@export var left_line_path : NodePath
-## NodePath for RightLimitLine node
-@export var right_line_path : NodePath
+@export var use_limit_offset : bool = true
 ## Optionally include audio
 @export var use_audio : bool = true
 ## Path to folder containing audio wavs. Make sure the files contained in this folder are in the order you wish to use them, as it will be looped through linlearly.
 @export var audio_path : String
-# Get PendulumLine node from pendulum_line_path
-@onready var pendulum_line : Line2D = get_node(pendulum_line_path)
-# Get LeftLimitLine node from left_line_path
-@onready var left_line : Line2D = get_node(left_line_path)
-# Get RightLimitLine node from right_line_path
-@onready var right_line : Line2D = get_node(right_line_path)
+
+# Get PendulumLine node
+@onready var pendulum_line : Line2D = %PendulumLine
+# Get LeftLimitLine node
+@onready var left_line : Line2D = %LeftLimitLine
+# Get RightLimitLine node
+@onready var right_line : Line2D = %RightLimitLine
 # Optimal distance for bezier curve control points to create a circle, based on 4 points
 @onready var optimal_control_point_distance = 0.552284749831
 # modification of optimal_control_point_distance to account for fractional circular arc. This will be equal to optimal_control_point_distance when swing_angle is 360.
@@ -101,14 +100,16 @@ func _set_limit_lines():
 
 # Set up Pendulums
 func _create_pendulums():
+	# max bpm = number of Pendulums, and will decrease with each new pendulum created
+	var current_bpm = pendulum_count * bpm_multiplier
 	# Loop for each Pendulum to create
 	for n in pendulum_count:
 		# Create Pendulum node
-		var pendulum_node = pendulum.instantiate()
+		var pendulum_node : Pendulum = pendulum.instantiate()
 		# Calculate Pendulum length based on Pendulum number and min / max lengths
 		var pendulum_length = lerp(min_length, max_length, (float)(n+1) / pendulum_count)
 		# Calculate Pendulum BPM based on Pendulum number and bpm_multiplier
-		var pendulum_bpm : float = (pendulum_count - n) * bpm_multiplier
+		#var pendulum_bpm : float = (pendulum_count - (n * bpm_ratio)) * bpm_multiplier
 		# Create Curve2D for Pendulum Path
 		var curve = Curve2D.new()
 		# Calculate bezier control point distance for this specific Pendulum path
@@ -150,7 +151,7 @@ func _create_pendulums():
 		# Add Curve2D to PathFollow2D
 		pendulum_node.set_curve(curve)
 		# Set BPM of Pendulum
-		pendulum_node.pendulum_bpm = pendulum_bpm
+		pendulum_node.pendulum_bpm = current_bpm
 		# Set Ease Type of Pendulum
 		pendulum_node.ease_type = ease_type
 		# Set Transition type of Pendulum
@@ -164,6 +165,8 @@ func _create_pendulums():
 		add_child(pendulum_node)
 		# Add pendulum to Pendulums Array
 		pendulums.push_back(pendulum_node)
+		# decrement current BPM
+		current_bpm -= (bpm_multiplier * bpm_ratio)
 	
 	# If drawing lines between Pendulums, add points to the line at center_origin and all Pendulum positions
 	if draw_lines_between_pendulums:
@@ -180,6 +183,11 @@ func _ready():
 	_set_limit_lines()
 	# Create Pendulums
 	_create_pendulums()
+	# calculate Pendulum Wave period (time is takes to complete a full cycle) and print to log
+	var period_seconds : float = ((bpm_multiplier * 2) / bpm_ratio) * 60
+	var period_minutes = floor((bpm_multiplier * 2) / bpm_ratio)
+	var period_seconds_remainder = snapped(fmod(period_seconds, 60.0), 0.001)
+	print("Period: ", period_minutes, " minutes ", period_seconds_remainder, " seconds")
 
 # Called once every frame
 func _process(_delta):

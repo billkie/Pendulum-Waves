@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://mc8p45i0t33m"]
 
-[ext_resource type="Script" path="res://Scripts/pendulum_wave.gd" id="1_dlbjq"]
+[ext_resource type="Script" path="res://Scripts/PendulumWave.gd" id="1_psio8"]
 [ext_resource type="PackedScene" uid="uid://f5cun7244dok" path="res://Scenes/LimitLine.tscn" id="2_alp8e"]
 
 [sub_resource type="Environment" id="Environment_4en3q"]
@@ -18,20 +18,7 @@ adjustment_saturation = 2.19
 [sub_resource type="CameraAttributesPhysical" id="CameraAttributesPhysical_lj433"]
 
 [node name="PendulumWave" type="Node2D"]
-script = ExtResource("1_dlbjq")
-pendulum_count = 150
-bpm_multiplier = 0.1
-min_length = 10.0
-pendulum_scale = 0.5
-swing_angle = 270.0
-right_origin = Vector2(0, 0)
-left_origin = Vector2(0, 0)
-ease_type = 2
-draw_lines_between_pendulums = true
-use_limit_offset = true
-pendulum_line_path = NodePath("PendulumLine")
-left_line_path = NodePath("LeftLimitLine")
-right_line_path = NodePath("RightLimitLine")
+script = ExtResource("1_psio8")
 audio_path = "res://Audio/Glockenspiel/F# minor pentatonic/"
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -41,9 +28,12 @@ environment = SubResource("Environment_4en3q")
 camera_attributes = SubResource("CameraAttributesPhysical_lj433")
 
 [node name="PendulumLine" type="Line2D" parent="."]
+unique_name_in_owner = true
 width = 1.2
 default_color = Color(0, 0.79, 1.97, 0.39)
 
 [node name="LeftLimitLine" parent="." instance=ExtResource("2_alp8e")]
+unique_name_in_owner = true
 
 [node name="RightLimitLine" parent="." instance=ExtResource("2_alp8e")]
+unique_name_in_owner = true

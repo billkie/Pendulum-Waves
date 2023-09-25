@@ -2,6 +2,7 @@
 # This allows multiple copies of the same sound to be played overlapping.
 @tool
 extends Node2D
+class_name SoundQueue
 
 var _next : int = 0
 var _audio_stream_players = []
